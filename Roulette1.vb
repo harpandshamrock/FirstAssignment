@@ -3,7 +3,7 @@
 Public Class Roulette1
 
     'LoadedorEmpty chamber False = empty True = loaded
-    Public LoadedOrEmpty As Boolean
+    Public Loaded As Boolean
     Public ShotsFiredThisRound As Integer = 0
     Public FinalScore As Integer = 0
     Public ChancesLeft As Integer = 2
@@ -13,77 +13,64 @@ Public Class Roulette1
     Public fileread As StreamReader
     Public LocationtoLookup As String
     Public SaveGameDirectory As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\RouletteSavedGames.txt"
+    Public WinOrLose As String = ""
+    Public LastActionTaken As String = ""
+    Dim CheatModeMessage As String = ""
+    Public TotalWins As Integer = 0
+    Public TotalLosses As Integer = 0
 
 
-    Public Sub HighScoreLookup(LocationtoLookup)
-        HighScoreDisplay.rtbHighScores.Text = ""
-        path = LocationtoLookup
-        Dim line1 As String
-        Try
-            fileread = New StreamReader(path)
-
-            Do Until fileread.EndOfStream
-                line1 = fileread.ReadLine
-                If line1 <> "" And
-                    line1 <> ",,," Then
-                    HighScoreDisplay.rtbHighScores.Text = HighScoreDisplay.rtbHighScores.Text & vbCrLf & line1
-                End If
-
-
-            Loop
-            fileread.Close()
-        Catch ex As Exception
-            MessageBox.Show("File reading error: " & ex.Message)
-        End Try
-
-
-    End Sub
+    'Sound for spinning the barrell.
     Private Sub PlaySpinBarrel()
         My.Computer.Audio.Play(My.Resources.ratchet, AudioPlayMode.Background)
     End Sub
 
-
-
+    'Sound for firing an empty chamber.
     Private Sub PlayEmptyChamber()
         My.Computer.Audio.Play(My.Resources.Dry_Fire_Gun_SoundBible_com_2053652037, AudioPlayMode.Background)
     End Sub
-
+    'Sound for firing a bullet.
     Private Sub PlayGunShot()
         My.Computer.Audio.Play(My.Resources.deserteagle, AudioPlayMode.Background)
     End Sub
+    'Sound for loading a bullet.
     Public Sub PlayLoadtheBullet()
         My.Computer.Audio.Play(My.Resources.Police_357_Magnum_Loading_SoundBible_com_439069938, AudioPlayMode.Background)
     End Sub
-    Public Function UpdateHighScores(FinalScore As Integer)
 
-        MsgBox(SaveGameDirectory)
-        HighScores1.dgvHighScores.Rows.Add(Form1.txtName.Text, DateAndTime.Now, FinalScore)
+    'Add the current score to the DataGridView highscore table and Save to the RouletteSavedGames file. 
+    Public Sub AddThisScoreToDataGridAndSortInDescendingOrder(FinalScore As Integer, WinOrLoss As String, TotalWins As Integer, TotalLosses As Integer)
 
-        '''HighScores1.dgvHighScores.Columns("Score").HeaderCell.SortGlyphDirection = SortOrder.Ascending
-        ''For i = 2 To HighScores1.dgvHighScores.Rows.Count - 1
-        ''    If HighScores1.dgvHighScores.Rows(i).Cells(2).Value > HighScores1.dgvHighScores.Rows(1).Cells(2).Value Then
-        ''        'move to top
+        HighScores1.dgvHighScores.Rows.Add(Form1.txtName.Text, DateAndTime.Now, FinalScore, WinOrLoss, TotalWins, TotalLosses)
 
 
-        ''    End If
-        ''Next
+        For i = 0 To HighScores1.dgvHighScores.Rows.Count - 1
+            For j = i + 1 To HighScores1.dgvHighScores.Rows.Count - 1
+                SwapDataGridRowsIfScoreFromrow2IsGreaterThanrow1(HighScores1.dgvHighScores.Rows(i), HighScores1.dgvHighScores.Rows(j))
+            Next
+        Next
 
+        Dim TxtWriter As StreamWriter
 
-        Using TxtWriter As StreamWriter = File.AppendText(SaveGameDirectory)
-            For Each currentrow As DataGridViewRow In HighScores1.dgvHighScores.Rows
-                For Each currentcolumn As DataGridViewCell In currentrow.Cells
-                    TxtWriter.Write(currentcolumn.Value & ",")
-                Next
+        Try
+
+            TxtWriter = New StreamWriter(SaveGameDirectory)
+            For i = 0 To HighScores1.dgvHighScores.Rows.Count - 2
+                ' MsgBox(HighScores1.dgvHighScores.Rows(i).Cells(0).Value)
+
+                TxtWriter.Write(HighScores1.dgvHighScores.Rows(i).Cells(0).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(1).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(2).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(3).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(4).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(5).Value)
 
                 TxtWriter.WriteLine()
 
             Next
             TxtWriter.Close()
+        Catch ex As Exception
+            MsgBox("file writing error: " & ex.Message)
+        End Try
 
-        End Using
+    End Sub
 
-        'HighScoreLookup("G:\Files Required for VS2015\Files\Deer Hunter Scores.txt")
-    End Function
+    'Reset controls to Play again or exit state.
     Public Sub ResetToPlayAgainOrExit()
         Form1.btnFire.Visible = False
         Form1.btnFireAway.Visible = False
@@ -91,7 +78,7 @@ Public Class Roulette1
         Form1.btnExit.Visible = True
     End Sub
 
-
+    'Sub related to the btnloadthebullet on form1.
     Public Sub LoadTheBullet()
 
 
@@ -112,87 +99,67 @@ Public Class Roulette1
             Form1.btnSpinChambers.Enabled = True
         End If
 
-        ' MsgBox(CurrentContestant)
+
 
     End Sub
 
-
+    'Sub related to btnspinchambers on form1.
     Public Sub SpinChambers()
-
+        Form1.btnCheatMode.Visible = True
+        Form1.btnHighScores.Visible = False
         PlaySpinBarrel()
         Dim Random1 As New Random
-
-
         Dim WhichChamber As Integer = Random1.Next(1, 6)
-        Dim message1 As String = ""
 
-
-
-        For i = 0 To 6
-
+        For i = 1 To 6
 
             If WhichChamber = i Then
                 BulletChamber(i) = True
             Else
                 BulletChamber(i) = False
             End If
-            message1 += i & "  " & BulletChamber(i) & "  :  "
+            CheatModeMessage += "Chamber " & i & "  " & BulletChamber(i) & "  :  "
 
         Next
-
-
         Form1.btnSpinChambers.Visible = False
         Form1.btnLoadBullet.Visible = False
         Form1.btnFire.Visible = True
         Form1.btnFireAway.Visible = True
-
-        If Form1.cbToggleCheatMode.Checked = True Then
-            MsgBox(message1 & "  " & CurrentContestant)
-        Else
-
-        End If
-
-
         Form1.lblChancesLeft.Text = "Chances Left: " & ChancesLeft
     End Sub
 
+    'Sub handling what happens on fire.
     Public Sub Fire()
+        LastActionTaken = "Fire"
         ShotsFiredThisRound += 1
         FinalScore += 1
-        LoadedOrEmpty = BulletChamber(ShotsFiredThisRound)
+        Loaded = BulletChamber(ShotsFiredThisRound)
         If ChancesLeft = 0 Then
+            WinOrLose = "Lose"
+            TotalLosses += 1
             PlayGunShot()
             MsgBox("Tough luck. Maybe your head will grow back in a week or two")
-            Form1.lblTotalShotsFired.Text = "Shots Fired this round: " & ShotsFiredThisRound
+            Form1.lblShotsFiredThisRound.Text = "Shots Fired this round: " & ShotsFiredThisRound
             Form1.lblAllShotsFired.Text = "Total Shots Fired Consecutively: " & FinalScore
             Form1.lblScoreMessage.Text = "You Lose: Total Shots Fired: " & FinalScore
             ResetToPlayAgainOrExit()
-            UpdateHighScores(FinalScore)
-
-
         Else
 
+            If Loaded = False Then
 
-
-
-
-
-
-            If LoadedOrEmpty = False Then
-
-                Form1.lblTotalShotsFired.Text = "Shots Fired this round: " & ShotsFiredThisRound
+                Form1.lblShotsFiredThisRound.Text = "Shots Fired this round: " & ShotsFiredThisRound
                 Form1.lblAllShotsFired.Text = "Total Shots Fired Consecutively: " & FinalScore
                 PlayEmptyChamber()
-            ElseIf LoadedOrEmpty = True Then
-
-                Form1.lblTotalShotsFired.Text = "Shots Fired this round: " & ShotsFiredThisRound
+            ElseIf Loaded = True Then
+                WinOrLose = "Lose"
+                TotalWins += 1
+                Form1.lblShotsFiredThisRound.Text = "Shots Fired this round: " & ShotsFiredThisRound
                 Form1.lblAllShotsFired.Text = "Total Shots Fired Consecutively: " & FinalScore
+                Form1.lblScoreMessage.Text = "You Lose: Total Shots Fired: " & FinalScore
+
                 PlayGunShot()
                 MsgBox("Better Luck next time, You just blew your head off!!!")
-                Form1.lblScoreMessage.Text = "You Lose: Total Shots Fired: " & FinalScore
-                UpdateHighScores(FinalScore)
-                ShotsFiredThisRound = 0
-                FinalScore = 0
+
                 ResetToPlayAgainOrExit()
 
 
@@ -206,14 +173,15 @@ Public Class Roulette1
 
     End Sub
 
-
+    'Sub handling what happens on firing away.
 
     Public Sub FireAway()
+        LastActionTaken = "FireAway"
         ShotsFiredThisRound += 1
         FinalScore += 1
         ChancesLeft -= 1
         Form1.lblChancesLeft.Text = "Chances Left: " & ChancesLeft
-        LoadedOrEmpty = BulletChamber(ShotsFiredThisRound)
+        Loaded = BulletChamber(ShotsFiredThisRound)
 
 
         If ChancesLeft = 0 Then
@@ -223,15 +191,16 @@ Public Class Roulette1
         End If
 
 
-        If LoadedOrEmpty = False Then
-            Form1.lblTotalShotsFired.Text = "Shots Fired this round: " & ShotsFiredThisRound
+        If Loaded = False Then
+            Form1.lblShotsFiredThisRound.Text = "Shots Fired this round: " & ShotsFiredThisRound
             Form1.lblAllShotsFired.Text = "Total Shots Fired Consecutively: " & FinalScore
             PlayEmptyChamber()
             MsgBox("That's a waste!")
-        ElseIf LoadedOrEmpty = True Then
+        ElseIf Loaded = True Then
 
-
-            Form1.lblTotalShotsFired.Text = "Shots Fired this round: " & ShotsFiredThisRound
+            WinOrLose = "Win"
+            TotalWins += 1
+            Form1.lblShotsFiredThisRound.Text = "Shots Fired this round: " & ShotsFiredThisRound
             Form1.lblAllShotsFired.Text = "Total Shots Fired Consecutively: " & FinalScore
             PlayGunShot()
             MsgBox("Well Done. You've dodged the bullet and lived!")
@@ -248,148 +217,178 @@ Public Class Roulette1
         End If
     End Sub
 
-
+    'Reset the scores from the last round and continue.
     Public Sub PlayAgain()
+        CheatModeMessage = ""
+        Form1.btnCheatMode.Visible = False
+        If LastActionTaken = "Fire" Then
+            Form1.btnHighScores.Visible = True
+            BulletChamber = {False, False, False, False, False, False, False}
+            Form1.btnLoadBullet.Visible = True
+            Form1.lblEnterName.Text = ""
+            Form1.lblNameReminder.Text = ""
+            Form1.txtName.BackColor = Color.White
+            Form1.txtName.Enabled = False
+            Form1.btnFire.Visible = False
+            Form1.btnFireAway.Visible = False
+            Form1.btnPlayAgain.Visible = False
+            Form1.btnExit.Visible = False
+            ChancesLeft = 2
+            AddThisScoreToDataGridAndSortInDescendingOrder(FinalScore, WinOrLose, TotalWins, TotalLosses)
+            ShotsFiredThisRound = 0
+            FinalScore = 0
+            ResetLabelsToStart()
 
+        ElseIf LastActionTaken = "FireAway" Then
 
-        BulletChamber = {False, False, False, False, False, False, False}
-        Form1.btnLoadBullet.Visible = True
-        Form1.lblEnterName.Text = ""
-        Form1.lblNameReminder.Text = ""
-        Form1.txtName.BackColor = Color.White
-        Form1.txtName.Enabled = False
-        Form1.btnFire.Visible = False
-        Form1.btnFireAway.Visible = False
-        Form1.btnPlayAgain.Visible = False
-        Form1.btnExit.Visible = False
-        ChancesLeft = 2
-        ShotsFiredThisRound = 0
+            BulletChamber = {False, False, False, False, False, False, False}
+            Form1.btnLoadBullet.Visible = True
+            Form1.lblEnterName.Text = ""
+            Form1.lblNameReminder.Text = ""
+            Form1.txtName.BackColor = Color.White
+            Form1.txtName.Enabled = False
+            Form1.btnFire.Visible = False
+            Form1.btnFireAway.Visible = False
+            Form1.btnPlayAgain.Visible = False
+            Form1.btnExit.Visible = False
+            ChancesLeft = 2
+            ShotsFiredThisRound = 0
+            Form1.lblShotsFiredThisRound.Text = "Shots Fired This Round = 0"
+            Form1.lblChancesLeft.Text = "Chances Left = 2"
+        Else MsgBox("Error: Problem with selection of 'LastActionTaken'")
+        End If
 
     End Sub
 
+    ' Return the game to the original state
     Public Sub ExitGame()
 
-        Form1.btnLoadBullet.Visible = True
-        Form1.lblEnterName.Text = "Please enter your name"
-        Form1.txtName.BackColor = Color.White
-        Form1.txtName.Enabled = True
-        Form1.btnFire.Visible = False
-        Form1.btnFireAway.Visible = False
-        Form1.btnPlayAgain.Visible = False
-        Form1.btnExit.Visible = False
-        UpdateHighScores(FinalScore)
-        Form1.txtName.Text = ""
+        Form1.btnCheatMode.Visible = False
+        CheatModeMessage = ""
+        Form1.btnHighScores.Visible = True
+        If LastActionTaken = "Fire" Then
+            Form1.btnLoadBullet.Visible = True
+            Form1.lblEnterName.Text = "Please enter your name"
+            Form1.txtName.BackColor = Color.White
+            Form1.txtName.Enabled = True
+            Form1.btnFire.Visible = False
+            Form1.btnFireAway.Visible = False
+            Form1.btnPlayAgain.Visible = False
+            Form1.btnExit.Visible = False
+            AddThisScoreToDataGridAndSortInDescendingOrder(FinalScore, WinOrLose, TotalWins, TotalLosses)
+            Form1.txtName.Text = ""
+            Form1.lblNameReminder.Text = ""
+            FinalScore = 0
+            ChancesLeft = 2
+            ShotsFiredThisRound = 0
+            TotalLosses = 0
+            TotalWins = 0
+            ResetLabelsToStart()
 
-        Form1.lblNameReminder.Text = ""
-        FinalScore = 0
-        ChancesLeft = 2
-        ShotsFiredThisRound = 0
+        ElseIf LastActionTaken = "FireAway" Then
 
 
+            Form1.btnLoadBullet.Visible = True
+            Form1.lblEnterName.Text = "Please enter your name"
+            Form1.txtName.BackColor = Color.White
+            Form1.txtName.Enabled = True
+            Form1.btnFire.Visible = False
+            Form1.btnFireAway.Visible = False
+            Form1.btnPlayAgain.Visible = False
+            Form1.btnExit.Visible = False
+            AddThisScoreToDataGridAndSortInDescendingOrder(FinalScore, WinOrLose, TotalWins, TotalLosses)
+            Form1.txtName.Text = ""
 
+            Form1.lblNameReminder.Text = ""
+            FinalScore = 0
+            ChancesLeft = 2
+            ShotsFiredThisRound = 0
+            ResetLabelsToStart()
+
+        Else MsgBox("Error: Problem with selection of 'LastActionTaken'")
+
+        End If
 
 
     End Sub
 
-
+    'Handles the user entering their name using the enter key.
     Public Sub EnterOnLoadBullet()
 
 
 
 
-        If Form1.txtName.Text = "" Or Form1.txtName.Text = "Put your name in here" Then
-                Form1.lblNameReminder.Text = "Please Enter your name above"
-                Form1.txtName.BackColor = Color.Red
-                Return
-            Else
-                PlayLoadtheBullet()
-                CurrentContestant = Form1.txtName.Text
-                Form1.lblEnterName.Text = ""
-                Form1.lblNameReminder.Text = ""
-                Form1.txtName.BackColor = Color.White
-                Form1.btnLoadBullet.Visible = False
-                Form1.txtName.Enabled = False
-                Form1.btnSpinChambers.Visible = True
+        If Form1.txtName.Text = "" Or Form1.txtName.Text = "Put your name In here" Then
+            Form1.lblNameReminder.Text = "Please Enter your name above"
+            Form1.txtName.BackColor = Color.Red
+            Return
+        Else
+            PlayLoadtheBullet()
+            CurrentContestant = Form1.txtName.Text
+            Form1.lblEnterName.Text = ""
+            Form1.lblNameReminder.Text = ""
+            Form1.txtName.BackColor = Color.White
+            Form1.btnLoadBullet.Visible = False
+            Form1.txtName.Enabled = False
+            Form1.btnSpinChambers.Visible = True
 
-            End If
-
-
-        MsgBox(CurrentContestant)
+        End If
     End Sub
 
+    'On starting the game add the scores saved in the RouletteSavedGames file to the datagridview highscore table
     Public Sub ReadFromTxtToDataGrid()
-        ''''''Dim TextfieldParser1 As New Microsoft.VisualBasic.FileIO.TextFieldParser(SaveGameDirectory)
-        ''''''TextfieldParser1.Delimiters = New String() {"  "}
-        ''''''While Not TextfieldParser1.EndOfData
-        ''''''    Dim Row1 As String() = TextfieldParser1.ReadFields()
-        ''''''    If HighScores1.dgvHighScores.Columns.Count = 0 AndAlso Row1.Count > 0 Then
-        ''''''        For i = 0 To Row1.Count - 1
-        ''''''            HighScores1.dgvHighScores.Columns.Add("Column" & i + 1, "Column" & i + 1)
-        ''''''        Next
-        ''''''    End If
-        ''''''    HighScores1.dgvHighScores.Rows.Add()
-        ''''''End While
-
-        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
         Dim DataArray() As String
         Dim Line As String
-        Dim path1 As String = SaveGameDirectory
         Try
-            Dim fileread1 = New StreamReader(path1)
+            Dim fileread1 = New StreamReader(SaveGameDirectory)
             Do Until fileread1.EndOfStream
                 Line = fileread1.ReadLine
+                DataArray = Line.Split(", ")
 
-
-
-
-
-
-                DataArray = Line.Split(",")
-                ' MsgBox(DataArray(0).Length)
-                ' MsgBox(DataArray(1).Length)
-                ' MsgBox(DataArray(2).Length)
-                If DataArray(0).Length = 3 Then
-
-
-                    HighScores1.dgvHighScores.Rows.Add(DataArray(0), DataArray(1), DataArray(2))
-
+                If DataArray.Length = 6 Then
+                    HighScores1.dgvHighScores.Rows.Add(DataArray(0), DataArray(1), DataArray(2), DataArray(3), DataArray(4), DataArray(5))
                 Else
+
                 End If
 
 
             Loop
             fileread1.Close()
         Catch ex As Exception
-            MessageBox.Show("File reading error: " & ex.Message)
+            MessageBox.Show("File reading error:  " & ex.Message)
         End Try
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-        ''''For Each line As String In System.IO.File.ReadAllLines(SaveGameDirectory)
-        ''''    HighScores1.dgvHighScores.Rows.Add(line.Split("   "))
-        ''''Next
-
-
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-
-        '''''''Dim reader = New StreamReader(SaveGameDirectory)
-        '''''''Dim line As String
-        '''''''Do
-
-        '''''''    Dim parts As String() = line.Split("   ")
-        '''''''    HighScores1.dgvHighScores.Rows.Add(parts)
-
-
-        '''''''    While (line = reader.ReadLine()) <> Nothing
 
     End Sub
 
+    'Reset labels providing score information.
+    Public Sub ResetLabelsToStart()
+        Form1.lblAllShotsFired.Text = "Total Shots Fired = 0"
+        Form1.lblShotsFiredThisRound.Text = "Shots Fired This Round = 0"
+        Form1.lblChancesLeft.Text = "Chances Left = 2"
+    End Sub
 
+    'Cheat!
+    Public Sub CheatMode()
 
+        MsgBox(CheatModeMessage)
 
+    End Sub
 
+    Public Sub SwapDataGridRowsIfScoreFromrow2IsGreaterThanrow1(Row1 As DataGridViewRow, Row2 As DataGridViewRow)
+        Dim Temprow1 As DataGridViewRow
+        Dim Temprow2 As DataGridViewRow
 
+        Temprow1 = Row1
+        Temprow2 = Row2
+
+        If Row2.Cells(2).Value < Row1.Cells(2).Value Then
+            Row1 = Temprow2
+            Row2 = Temprow1
+        Else
+
+        End If
+    End Sub
 
 
 

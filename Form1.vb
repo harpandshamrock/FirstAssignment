@@ -1,14 +1,6 @@
 ﻿Public Class Form1
 
-
-
-
     Dim Roulette2 As New Roulette1
-
-
-
-
-
 
 
     Private Sub btnHighScores_Click(sender As Object, e As EventArgs) Handles btnHighScores.Click
@@ -51,12 +43,7 @@
         Roulette2.FireAway()
     End Sub
 
-    Private Sub btnHighScores2_Click(sender As Object, e As EventArgs) Handles btnHighScores2.Click
-        Roulette2.HighScoreLookup(Roulette2.SaveGameDirectory)
-        Me.Hide()
-        HighScoreDisplay.Show()
 
-    End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         pbNeeded.Image = My.Resources.happy_gun
@@ -67,5 +54,13 @@
     Private Sub btnQuitGame_Click(sender As Object, e As EventArgs) Handles btnQuitGame.Click
         Me.Close()
 
+    End Sub
+
+    Private Sub cbToggleCheatMode_CheckedChanged(sender As Object, e As EventArgs)
+        Roulette2.CheatMode()
+    End Sub
+
+    Private Sub btnCheatMode_Click(sender As Object, e As EventArgs) Handles btnCheatMode.Click
+        Roulette2.CheatMode()
     End Sub
 End Class
