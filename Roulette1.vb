@@ -12,7 +12,7 @@ Public Class Roulette1
     Public path As String
     Public fileread As StreamReader
     Public LocationtoLookup As String
-    Public SaveGameDirectory As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\RouletteSavedGames.txt"
+    Public SaveGamePath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\RouletteSavedGames.txt"
     Public WinOrLose As String = ""
     Public LastActionTaken As String = ""
     Dim CheatModeMessage As String = ""
@@ -38,15 +38,34 @@ Public Class Roulette1
         My.Computer.Audio.Play(My.Resources.Police_357_Magnum_Loading_SoundBible_com_439069938, AudioPlayMode.Background)
     End Sub
 
-    'Add the current score to the DataGridView highscore table and Save to the RouletteSavedGames file. 
+    'Function used to rearrange Datagridview rows. Moves Row with a larger value for score to the position it occupies.
+    Public Sub MoveDataGridRowsIfScoreFromrow2IsGreaterThanrow1(Row1 As DataGridViewRow, Row2 As DataGridViewRow)
+        Dim CurrentIndex As Integer
+        Dim TempRow2 As DataGridViewRow
+        CurrentIndex = Row1.Index
+        TempRow2 = Row2
+
+        If CInt(Row2.Cells(2).Value) > CInt(Row1.Cells(2).Value) Then
+
+            HighScores1.dgvHighScores.Rows.Remove(Row2)
+            HighScores1.dgvHighScores.Rows.Insert(CurrentIndex, TempRow2)
+        Else
+
+        End If
+    End Sub
+
+
+
+    'Add the current score to the DataGridView highscore table sort it and Save to the RouletteSavedGames file. 
     Public Sub AddThisScoreToDataGridAndSortInDescendingOrder(FinalScore As Integer, WinOrLoss As String, TotalWins As Integer, TotalLosses As Integer)
 
         HighScores1.dgvHighScores.Rows.Add(Form1.txtName.Text, DateAndTime.Now, FinalScore, WinOrLoss, TotalWins, TotalLosses)
+        Dim i As Integer
+        Dim j As Integer
 
-
-        For i = 0 To HighScores1.dgvHighScores.Rows.Count - 1
-            For j = i + 1 To HighScores1.dgvHighScores.Rows.Count - 1
-                SwapDataGridRowsIfScoreFromrow2IsGreaterThanrow1(HighScores1.dgvHighScores.Rows(i), HighScores1.dgvHighScores.Rows(j))
+        For i = 0 To HighScores1.dgvHighScores.Rows.Count - 3
+            For j = i + 1 To HighScores1.dgvHighScores.Rows.Count - 2
+                MoveDataGridRowsIfScoreFromrow2IsGreaterThanrow1(HighScores1.dgvHighScores.Rows(i), HighScores1.dgvHighScores.Rows(j))
             Next
         Next
 
@@ -54,13 +73,14 @@ Public Class Roulette1
 
         Try
 
-            TxtWriter = New StreamWriter(SaveGameDirectory)
+            TxtWriter = New StreamWriter(SaveGamePath)
             For i = 0 To HighScores1.dgvHighScores.Rows.Count - 2
-                ' MsgBox(HighScores1.dgvHighScores.Rows(i).Cells(0).Value)
+                For j = 0 To 4
+                    TxtWriter.Write(HighScores1.dgvHighScores.Rows(i).Cells(j).Value & ",")
+                Next
+                TxtWriter.Write(HighScores1.dgvHighScores.Rows(i).Cells(5).Value)
 
-                TxtWriter.Write(HighScores1.dgvHighScores.Rows(i).Cells(0).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(1).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(2).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(3).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(4).Value & "," & HighScores1.dgvHighScores.Rows(i).Cells(5).Value)
-
-                TxtWriter.WriteLine()
+                    TxtWriter.WriteLine()
 
             Next
             TxtWriter.Close()
@@ -72,6 +92,8 @@ Public Class Roulette1
 
     'Reset controls to Play again or exit state.
     Public Sub ResetToPlayAgainOrExit()
+        Form1.btnCheatMode.Visible = False
+        Form1.btnCheatMode.Text = "Cheat!!!"
         Form1.btnFire.Visible = False
         Form1.btnFireAway.Visible = False
         Form1.btnPlayAgain.Visible = True
@@ -80,8 +102,6 @@ Public Class Roulette1
 
     'Sub related to the btnloadthebullet on form1.
     Public Sub LoadTheBullet()
-
-
 
         If Form1.txtName.Text = "" Or Form1.txtName.Text = "Put your name in here" Then
             Form1.lblNameReminder.Text = "Please Enter your name above"
@@ -98,9 +118,6 @@ Public Class Roulette1
             Form1.btnSpinChambers.Visible = True
             Form1.btnSpinChambers.Enabled = True
         End If
-
-
-
     End Sub
 
     'Sub related to btnspinchambers on form1.
@@ -109,17 +126,16 @@ Public Class Roulette1
         Form1.btnHighScores.Visible = False
         PlaySpinBarrel()
         Dim Random1 As New Random
-        Dim WhichChamber As Integer = Random1.Next(1, 6)
+        Dim WhichChamber As Integer = (Random1.Next(1, 6) + 3) Mod 7
 
         For i = 1 To 6
 
             If WhichChamber = i Then
                 BulletChamber(i) = True
+                CheatModeMessage = "Chamber " & i & " Loaded"
             Else
                 BulletChamber(i) = False
             End If
-            CheatModeMessage += "Chamber " & i & "  " & BulletChamber(i) & "  :  "
-
         Next
         Form1.btnSpinChambers.Visible = False
         Form1.btnLoadBullet.Visible = False
@@ -156,21 +172,12 @@ Public Class Roulette1
                 Form1.lblShotsFiredThisRound.Text = "Shots Fired this round: " & ShotsFiredThisRound
                 Form1.lblAllShotsFired.Text = "Total Shots Fired Consecutively: " & FinalScore
                 Form1.lblScoreMessage.Text = "You Lose: Total Shots Fired: " & FinalScore
-
                 PlayGunShot()
                 MsgBox("Better Luck next time, You just blew your head off!!!")
-
                 ResetToPlayAgainOrExit()
-
-
-
-
             Else MsgBox("Error with LoadedOrEmpty")
             End If
-
         End If
-
-
     End Sub
 
     'Sub handling what happens on firing away.
@@ -183,13 +190,11 @@ Public Class Roulette1
         Form1.lblChancesLeft.Text = "Chances Left: " & ChancesLeft
         Loaded = BulletChamber(ShotsFiredThisRound)
 
-
         If ChancesLeft = 0 Then
             Form1.btnFireAway.Visible = False
         Else
 
         End If
-
 
         If Loaded = False Then
             Form1.lblShotsFiredThisRound.Text = "Shots Fired this round: " & ShotsFiredThisRound
@@ -205,15 +210,9 @@ Public Class Roulette1
             PlayGunShot()
             MsgBox("Well Done. You've dodged the bullet and lived!")
             Form1.lblScoreMessage.Text = "You Win: Total Shots Fired: " & FinalScore
-
             ResetToPlayAgainOrExit()
 
-
-
         Else MsgBox("error with LoadedOrEmpty")
-
-
-
         End If
     End Sub
 
@@ -263,6 +262,7 @@ Public Class Roulette1
     ' Return the game to the original state
     Public Sub ExitGame()
 
+        
         Form1.btnCheatMode.Visible = False
         CheatModeMessage = ""
         Form1.btnHighScores.Visible = True
@@ -287,7 +287,6 @@ Public Class Roulette1
 
         ElseIf LastActionTaken = "FireAway" Then
 
-
             Form1.btnLoadBullet.Visible = True
             Form1.lblEnterName.Text = "Please enter your name"
             Form1.txtName.BackColor = Color.White
@@ -298,7 +297,6 @@ Public Class Roulette1
             Form1.btnExit.Visible = False
             AddThisScoreToDataGridAndSortInDescendingOrder(FinalScore, WinOrLose, TotalWins, TotalLosses)
             Form1.txtName.Text = ""
-
             Form1.lblNameReminder.Text = ""
             FinalScore = 0
             ChancesLeft = 2
@@ -308,15 +306,11 @@ Public Class Roulette1
         Else MsgBox("Error: Problem with selection of 'LastActionTaken'")
 
         End If
-
-
+        Form1.txtName.Select()
     End Sub
 
     'Handles the user entering their name using the enter key.
     Public Sub EnterOnLoadBullet()
-
-
-
 
         If Form1.txtName.Text = "" Or Form1.txtName.Text = "Put your name In here" Then
             Form1.lblNameReminder.Text = "Please Enter your name above"
@@ -331,7 +325,6 @@ Public Class Roulette1
             Form1.btnLoadBullet.Visible = False
             Form1.txtName.Enabled = False
             Form1.btnSpinChambers.Visible = True
-
         End If
     End Sub
 
@@ -339,26 +332,31 @@ Public Class Roulette1
     Public Sub ReadFromTxtToDataGrid()
         Dim DataArray() As String
         Dim Line As String
+
+        ' Create or overwrite the SaveGamePath file.
+        Dim fs As FileStream = File.Open(SaveGamePath, FileMode.Append)
+
+        fs.Close()
+
+
+        'Write scores from file to array if it contains any.
         Try
-            Dim fileread1 = New StreamReader(SaveGameDirectory)
+            Dim fileread1 = New StreamReader(SaveGamePath)
             Do Until fileread1.EndOfStream
                 Line = fileread1.ReadLine
-                DataArray = Line.Split(", ")
+                DataArray = Line.Split(",")
 
                 If DataArray.Length = 6 Then
                     HighScores1.dgvHighScores.Rows.Add(DataArray(0), DataArray(1), DataArray(2), DataArray(3), DataArray(4), DataArray(5))
                 Else
 
                 End If
-
-
             Loop
             fileread1.Close()
         Catch ex As Exception
             MessageBox.Show("File reading error:  " & ex.Message)
         End Try
-
-
+        Form1.txtName.Select()
     End Sub
 
     'Reset labels providing score information.
@@ -371,29 +369,8 @@ Public Class Roulette1
     'Cheat!
     Public Sub CheatMode()
 
-        MsgBox(CheatModeMessage)
+        Form1.btnCheatMode.Text = CheatModeMessage
 
     End Sub
-
-    Public Sub SwapDataGridRowsIfScoreFromrow2IsGreaterThanrow1(Row1 As DataGridViewRow, Row2 As DataGridViewRow)
-        Dim Temprow1 As DataGridViewRow
-        Dim Temprow2 As DataGridViewRow
-
-        Temprow1 = Row1
-        Temprow2 = Row2
-
-        If Row2.Cells(2).Value < Row1.Cells(2).Value Then
-            Row1 = Temprow2
-            Row2 = Temprow1
-        Else
-
-        End If
-    End Sub
-
-
-
-
-
-
 
 End Class

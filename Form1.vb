@@ -6,7 +6,6 @@
     Private Sub btnHighScores_Click(sender As Object, e As EventArgs) Handles btnHighScores.Click
         Me.Hide()
         HighScores1.Show()
-
     End Sub
 
     Private Sub txtName_KeyDown(sender As Object, e As KeyEventArgs) Handles txtName.KeyDown
@@ -15,8 +14,6 @@
             Roulette2.EnterOnLoadBullet()
         Else
         End If
-
-
     End Sub
 
     Private Sub btnLoadBullet_Click(sender As Object, e As EventArgs) Handles btnLoadBullet.Click
@@ -43,24 +40,19 @@
         Roulette2.FireAway()
     End Sub
 
-
-
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        pbSelectImage.Image = My.Resources.Revolver_gun
         pbNeeded.Image = My.Resources.happy_gun
-
         Roulette2.ReadFromTxtToDataGrid()
     End Sub
 
     Private Sub btnQuitGame_Click(sender As Object, e As EventArgs) Handles btnQuitGame.Click
         Me.Close()
-
-    End Sub
-
-    Private Sub cbToggleCheatMode_CheckedChanged(sender As Object, e As EventArgs)
-        Roulette2.CheatMode()
     End Sub
 
     Private Sub btnCheatMode_Click(sender As Object, e As EventArgs) Handles btnCheatMode.Click
         Roulette2.CheatMode()
     End Sub
+
+
 End Class

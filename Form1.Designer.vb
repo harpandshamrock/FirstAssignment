@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form1
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Form1
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.btnHighScores = New System.Windows.Forms.Button()
@@ -36,29 +36,29 @@ Partial Class Form1
         Me.btnPlayAgain = New System.Windows.Forms.Button()
         Me.btnSpinChambers = New System.Windows.Forms.Button()
         Me.btnLoadBullet = New System.Windows.Forms.Button()
-        Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
         Me.lblScoreMessage = New System.Windows.Forms.Label()
         Me.btnQuitGame = New System.Windows.Forms.Button()
         Me.pbNeeded = New System.Windows.Forms.PictureBox()
         Me.btnCheatMode = New System.Windows.Forms.Button()
-        CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pbSelectImage = New System.Windows.Forms.PictureBox()
         CType(Me.pbNeeded, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbSelectImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btnHighScores
         '
-        Me.btnHighScores.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnHighScores.Location = New System.Drawing.Point(43, 231)
+        Me.btnHighScores.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnHighScores.Location = New System.Drawing.Point(1, 238)
         Me.btnHighScores.Name = "btnHighScores"
-        Me.btnHighScores.Size = New System.Drawing.Size(652, 60)
+        Me.btnHighScores.Size = New System.Drawing.Size(667, 60)
         Me.btnHighScores.TabIndex = 25
         Me.btnHighScores.Text = "HighScores"
         Me.btnHighScores.UseVisualStyleBackColor = True
         '
         'btnExit
         '
-        Me.btnExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnExit.Location = New System.Drawing.Point(274, 362)
+        Me.btnExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnExit.Location = New System.Drawing.Point(232, 368)
         Me.btnExit.Name = "btnExit"
         Me.btnExit.Size = New System.Drawing.Size(200, 60)
         Me.btnExit.TabIndex = 24
@@ -69,7 +69,7 @@ Partial Class Form1
         'lblAllShotsFired
         '
         Me.lblAllShotsFired.AutoSize = True
-        Me.lblAllShotsFired.Location = New System.Drawing.Point(506, 362)
+        Me.lblAllShotsFired.Location = New System.Drawing.Point(464, 368)
         Me.lblAllShotsFired.Name = "lblAllShotsFired"
         Me.lblAllShotsFired.Size = New System.Drawing.Size(87, 13)
         Me.lblAllShotsFired.TabIndex = 23
@@ -80,7 +80,7 @@ Partial Class Form1
         Me.lblNameReminder.AutoSize = True
         Me.lblNameReminder.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNameReminder.ForeColor = System.Drawing.Color.Red
-        Me.lblNameReminder.Location = New System.Drawing.Point(270, 76)
+        Me.lblNameReminder.Location = New System.Drawing.Point(228, 82)
         Me.lblNameReminder.Name = "lblNameReminder"
         Me.lblNameReminder.Size = New System.Drawing.Size(0, 20)
         Me.lblNameReminder.TabIndex = 22
@@ -88,7 +88,7 @@ Partial Class Form1
         'txtName
         '
         Me.txtName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtName.Location = New System.Drawing.Point(274, 41)
+        Me.txtName.Location = New System.Drawing.Point(232, 47)
         Me.txtName.Name = "txtName"
         Me.txtName.Size = New System.Drawing.Size(200, 26)
         Me.txtName.TabIndex = 21
@@ -98,7 +98,7 @@ Partial Class Form1
         '
         Me.lblEnterName.AutoSize = True
         Me.lblEnterName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEnterName.Location = New System.Drawing.Point(270, 12)
+        Me.lblEnterName.Location = New System.Drawing.Point(228, 18)
         Me.lblEnterName.Name = "lblEnterName"
         Me.lblEnterName.Size = New System.Drawing.Size(176, 20)
         Me.lblEnterName.TabIndex = 20
@@ -107,7 +107,7 @@ Partial Class Form1
         'lblChancesLeft
         '
         Me.lblChancesLeft.AutoSize = True
-        Me.lblChancesLeft.Location = New System.Drawing.Point(506, 418)
+        Me.lblChancesLeft.Location = New System.Drawing.Point(464, 424)
         Me.lblChancesLeft.Name = "lblChancesLeft"
         Me.lblChancesLeft.Size = New System.Drawing.Size(102, 13)
         Me.lblChancesLeft.TabIndex = 19
@@ -116,7 +116,7 @@ Partial Class Form1
         'lblShotsFiredThisRound
         '
         Me.lblShotsFiredThisRound.AutoSize = True
-        Me.lblShotsFiredThisRound.Location = New System.Drawing.Point(506, 393)
+        Me.lblShotsFiredThisRound.Location = New System.Drawing.Point(464, 399)
         Me.lblShotsFiredThisRound.Name = "lblShotsFiredThisRound"
         Me.lblShotsFiredThisRound.Size = New System.Drawing.Size(60, 13)
         Me.lblShotsFiredThisRound.TabIndex = 18
@@ -124,8 +124,8 @@ Partial Class Form1
         '
         'btnFireAway
         '
-        Me.btnFireAway.Font = New System.Drawing.Font("Microsoft Sans Serif", 25.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFireAway.Location = New System.Drawing.Point(274, 361)
+        Me.btnFireAway.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnFireAway.Location = New System.Drawing.Point(232, 367)
         Me.btnFireAway.Name = "btnFireAway"
         Me.btnFireAway.Size = New System.Drawing.Size(200, 60)
         Me.btnFireAway.TabIndex = 17
@@ -135,8 +135,8 @@ Partial Class Form1
         '
         'btnFire
         '
-        Me.btnFire.Font = New System.Drawing.Font("Microsoft Sans Serif", 25.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFire.Location = New System.Drawing.Point(274, 297)
+        Me.btnFire.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnFire.Location = New System.Drawing.Point(232, 303)
         Me.btnFire.Name = "btnFire"
         Me.btnFire.Size = New System.Drawing.Size(200, 60)
         Me.btnFire.TabIndex = 16
@@ -146,8 +146,8 @@ Partial Class Form1
         '
         'btnPlayAgain
         '
-        Me.btnPlayAgain.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPlayAgain.Location = New System.Drawing.Point(274, 298)
+        Me.btnPlayAgain.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPlayAgain.Location = New System.Drawing.Point(232, 304)
         Me.btnPlayAgain.Name = "btnPlayAgain"
         Me.btnPlayAgain.Size = New System.Drawing.Size(200, 60)
         Me.btnPlayAgain.TabIndex = 15
@@ -157,8 +157,8 @@ Partial Class Form1
         '
         'btnSpinChambers
         '
-        Me.btnSpinChambers.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSpinChambers.Location = New System.Drawing.Point(274, 165)
+        Me.btnSpinChambers.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSpinChambers.Location = New System.Drawing.Point(232, 171)
         Me.btnSpinChambers.Name = "btnSpinChambers"
         Me.btnSpinChambers.Size = New System.Drawing.Size(200, 60)
         Me.btnSpinChambers.TabIndex = 14
@@ -168,69 +168,73 @@ Partial Class Form1
         '
         'btnLoadBullet
         '
-        Me.btnLoadBullet.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnLoadBullet.Location = New System.Drawing.Point(274, 102)
+        Me.btnLoadBullet.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnLoadBullet.Location = New System.Drawing.Point(232, 108)
         Me.btnLoadBullet.Name = "btnLoadBullet"
         Me.btnLoadBullet.Size = New System.Drawing.Size(200, 60)
         Me.btnLoadBullet.TabIndex = 13
         Me.btnLoadBullet.Text = "Load Bullet"
         Me.btnLoadBullet.UseVisualStyleBackColor = True
         '
-        'AxWindowsMediaPlayer1
-        '
-        Me.AxWindowsMediaPlayer1.Enabled = True
-        Me.AxWindowsMediaPlayer1.Location = New System.Drawing.Point(43, 12)
-        Me.AxWindowsMediaPlayer1.Name = "AxWindowsMediaPlayer1"
-        Me.AxWindowsMediaPlayer1.OcxState = CType(resources.GetObject("AxWindowsMediaPlayer1.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.AxWindowsMediaPlayer1.Size = New System.Drawing.Size(200, 213)
-        Me.AxWindowsMediaPlayer1.TabIndex = 27
-        '
         'lblScoreMessage
         '
         Me.lblScoreMessage.AutoSize = True
-        Me.lblScoreMessage.Location = New System.Drawing.Point(50, 365)
+        Me.lblScoreMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblScoreMessage.Location = New System.Drawing.Point(12, 334)
+        Me.lblScoreMessage.MaximumSize = New System.Drawing.Size(200, 400)
         Me.lblScoreMessage.Name = "lblScoreMessage"
-        Me.lblScoreMessage.Size = New System.Drawing.Size(0, 13)
+        Me.lblScoreMessage.Size = New System.Drawing.Size(0, 29)
         Me.lblScoreMessage.TabIndex = 28
         '
         'btnQuitGame
         '
-        Me.btnQuitGame.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnQuitGame.Location = New System.Drawing.Point(43, 446)
+        Me.btnQuitGame.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnQuitGame.Location = New System.Drawing.Point(1, 452)
         Me.btnQuitGame.Name = "btnQuitGame"
-        Me.btnQuitGame.Size = New System.Drawing.Size(652, 65)
+        Me.btnQuitGame.Size = New System.Drawing.Size(667, 65)
         Me.btnQuitGame.TabIndex = 30
         Me.btnQuitGame.Text = "Quit"
         Me.btnQuitGame.UseVisualStyleBackColor = True
         '
         'pbNeeded
         '
-        Me.pbNeeded.Location = New System.Drawing.Point(495, 12)
+        Me.pbNeeded.Location = New System.Drawing.Point(438, 18)
         Me.pbNeeded.Name = "pbNeeded"
-        Me.pbNeeded.Size = New System.Drawing.Size(200, 213)
+        Me.pbNeeded.Size = New System.Drawing.Size(230, 213)
+        Me.pbNeeded.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pbNeeded.TabIndex = 32
         Me.pbNeeded.TabStop = False
         '
         'btnCheatMode
         '
-        Me.btnCheatMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCheatMode.Location = New System.Drawing.Point(495, 297)
+        Me.btnCheatMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCheatMode.Location = New System.Drawing.Point(438, 303)
         Me.btnCheatMode.Name = "btnCheatMode"
-        Me.btnCheatMode.Size = New System.Drawing.Size(200, 60)
+        Me.btnCheatMode.Size = New System.Drawing.Size(230, 60)
         Me.btnCheatMode.TabIndex = 33
         Me.btnCheatMode.Text = "Cheat!!!"
         Me.btnCheatMode.UseVisualStyleBackColor = True
+        Me.btnCheatMode.Visible = False
+        '
+        'pbSelectImage
+        '
+        Me.pbSelectImage.Location = New System.Drawing.Point(1, 18)
+        Me.pbSelectImage.Name = "pbSelectImage"
+        Me.pbSelectImage.Size = New System.Drawing.Size(219, 214)
+        Me.pbSelectImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbSelectImage.TabIndex = 34
+        Me.pbSelectImage.TabStop = False
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(710, 518)
+        Me.ClientSize = New System.Drawing.Size(669, 518)
+        Me.Controls.Add(Me.pbSelectImage)
         Me.Controls.Add(Me.btnCheatMode)
         Me.Controls.Add(Me.pbNeeded)
         Me.Controls.Add(Me.btnQuitGame)
         Me.Controls.Add(Me.lblScoreMessage)
-        Me.Controls.Add(Me.AxWindowsMediaPlayer1)
         Me.Controls.Add(Me.btnHighScores)
         Me.Controls.Add(Me.btnExit)
         Me.Controls.Add(Me.lblAllShotsFired)
@@ -247,8 +251,8 @@ Partial Class Form1
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Form1"
         Me.Text = "Russian Roulette"
-        CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbNeeded, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbSelectImage, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -267,9 +271,9 @@ Partial Class Form1
     Friend WithEvents btnPlayAgain As Button
     Friend WithEvents btnSpinChambers As Button
     Friend WithEvents btnLoadBullet As Button
-    Friend WithEvents AxWindowsMediaPlayer1 As AxWMPLib.AxWindowsMediaPlayer
     Friend WithEvents lblScoreMessage As Label
     Friend WithEvents btnQuitGame As Button
     Friend WithEvents pbNeeded As PictureBox
     Friend WithEvents btnCheatMode As Button
+    Friend WithEvents pbSelectImage As PictureBox
 End Class

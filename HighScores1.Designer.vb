@@ -74,17 +74,21 @@ Partial Class HighScores1
         '
         'Name1
         '
+        Me.Name1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
         Me.Name1.HeaderText = "Name"
         Me.Name1.Name = "Name1"
         Me.Name1.ReadOnly = True
         Me.Name1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.Name1.Width = 74
         '
         'Date1
         '
+        Me.Date1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
         Me.Date1.HeaderText = "Date"
         Me.Date1.Name = "Date1"
         Me.Date1.ReadOnly = True
         Me.Date1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.Date1.Width = 63
         '
         'Score
         '
@@ -98,18 +102,21 @@ Partial Class HighScores1
         Me.WinOrLose.HeaderText = "WinOrLose"
         Me.WinOrLose.Name = "WinOrLose"
         Me.WinOrLose.ReadOnly = True
+        Me.WinOrLose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'TotalWins1
         '
         Me.TotalWins1.HeaderText = "Total Wins"
         Me.TotalWins1.Name = "TotalWins1"
         Me.TotalWins1.ReadOnly = True
+        Me.TotalWins1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'TotalLosses1
         '
         Me.TotalLosses1.HeaderText = "Total Losses"
         Me.TotalLosses1.Name = "TotalLosses1"
         Me.TotalLosses1.ReadOnly = True
+        Me.TotalLosses1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'HighScores1
         '
