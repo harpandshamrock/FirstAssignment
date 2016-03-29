@@ -126,7 +126,7 @@ Public Class Roulette1
         Form1.btnHighScores.Visible = False
         PlaySpinBarrel()
         Dim Random1 As New Random
-        Dim WhichChamber As Integer = (Random1.Next(1, 6) + 3) Mod 7
+        Dim WhichChamber As Integer = Random1.Next(1, 7)
 
         For i = 1 To 6
 
